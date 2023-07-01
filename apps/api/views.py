@@ -24,7 +24,7 @@ class ObjectTourismView(APIView):
         else:
             del_all_from_buf_by_username(username)
 
-        tourist_objects = get_tourist_objects(float(center_lat), float(center_lon), float(radius))
+        tourist_objects = get_tourist_objects(float(center_lon), float(center_lat), float(radius))
         save_tourist_object(tourist_objects, username)
 
         return Response(status=status.HTTP_201_CREATED)
