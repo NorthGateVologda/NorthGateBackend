@@ -7,6 +7,7 @@
     <list default="true" id="bcbda7a1-3154-4cc0-a591-b760d214d5f8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/api/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/migrations/0001_initial.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/api/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/api/services/converter_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/services/converter_service.py" afterDir="false" />
@@ -134,7 +135,7 @@
       <workItem from="1688220357618" duration="200000" />
       <workItem from="1688220656045" duration="7558000" />
       <workItem from="1688228266491" duration="6140000" />
-      <workItem from="1688235352564" duration="6760000" />
+      <workItem from="1688235352564" duration="8613000" />
     </task>
     <servers />
   </component>
