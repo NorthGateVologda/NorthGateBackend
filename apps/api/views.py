@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from apps.api.exceptions import InvalidRequestException, UserNameAlreadyExistException
+from apps.api.exceptions import InvalidRequestException
 from .services.object_tourism_service import *
 from .services.username_service import *
 
