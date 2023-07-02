@@ -8,35 +8,37 @@
 
 2. Установите зависимости, используя следующие команды:
 - Для локальной разработки
-   ```shell
-   pip install -r requirements/dev.txt
-   ```
+```shell
+pip install -r requirements/dev.txt
+```
 - Для пользования
-   ```shell
-   pip install -r requirements/prod.txt
-   ```
+```shell
+pip install -r requirements/prod.txt
+```
 
-3. Создайте файл `.env` в корневой директории проекта и укажите необходимые переменные окружения. Пример содержимого `.env`:
+3. Создайте файл `.env` в корневой директории проекта и укажите необходимые переменные окружения. 
 
-    ```plaintext
-    DB_NAME=имя_базы_данных
-    DB_USER=пользователь_базы_данных
-    DB_PASSWORD=пароль_базы_данных
-    DB_HOST=хост_базы_данных
-    DB_PORT=порт_базы_данных
-    SECRET_KEY=секретный_ключ
-    ENVIRONMENT=development
-    ```
+Пример содержимого `.env`:
+
+```plaintext
+DB_NAME=имя_базы_данных
+DB_USER=пользователь_базы_данных
+DB_PASSWORD=пароль_базы_данных
+DB_HOST=хост_базы_данных
+DB_PORT=порт_базы_данных
+SECRET_KEY=секретный_ключ
+ENVIRONMENT=development
+```
 
 4. Примените миграции с помощью следующей команды:
-    ```shell
-    python manage.py migrate
-    ```
+```shell
+python manage.py migrate
+```
 
 5. Запустите сервер разработки:
-    ```shell
-    python manage.py runserver
-    ```
+```shell
+python manage.py runserver
+```
 
 ## Конфигурация базы данных
 
