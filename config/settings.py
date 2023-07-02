@@ -9,7 +9,7 @@ path_to_env = os.path.join(BASE_DIR, '.env')
 environ.Env.read_env(path_to_env)
 
 SECRET_KEY = env("SECRET_KEY")
-DEBUG = env("ENVIRONMENT") == "development"
+DEBUG = env("ENVIRONMENT") == "dev"
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -26,7 +26,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -34,6 +33,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 WSGI_APPLICATION = 'config.wsgi.application'
+APPEND_SLASH = True
 
 DATABASES = {
     'default': {
