@@ -2,14 +2,19 @@ import os
 from pathlib import Path
 import environ
 
+
+def get_secret(key, default=""):
+    value = os.getenv(key, default)
+    if os.path.isfile(value):
+        with open(value) as f:
+            return f.read().replace("\n", "")
+    return value.replace("\n", "")
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = environ.Env()
-path_to_env = os.path.join(BASE_DIR, '.env')
-environ.Env.read_env(path_to_env)
-
-SECRET_KEY = env("SECRET_KEY")
-DEBUG = env("ENVIRONMENT") == "dev"
+SECRET_KEY = get_secret("BACKEND_SECRET_KEY")
+DEBUG = get_secret("BACKEND_ENVIRONMENT") == "dev"
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -38,11 +43,11 @@ APPEND_SLASH = True
 DATABASES = {
     'default': {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": env("DB_NAME"), 
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
-        "HOST": env("DB_HOST"), 
-        "PORT": env("DB_PORT"),
+        "NAME": get_secret("BACKEND_DB_NAME"),
+        "USER": get_secret("BACKEND_DB_USER"),
+        "PASSWORD": get_secret("BACKEND_DB_PASSWORD"),
+        "HOST": get_secret("BACKEND_DB_HOST"),
+        "PORT": get_secret("BACKEND_DB_PORT"),
     }
 }
 
