@@ -41,7 +41,7 @@ class BufferObjectTourism(models.Model):
     y = models.FloatField()
     username = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    wkb_geometry = models.GeometryField()
+    wkb_geometry = models.TextField()
 
     def __str__(self):
         return self.name

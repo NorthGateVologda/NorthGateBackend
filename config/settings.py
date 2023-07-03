@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import environ
+import logging
 
 
 def get_secret(key, default=""):
@@ -12,9 +13,39 @@ def get_secret(key, default=""):
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+DEBUG = False
 
-SECRET_KEY = get_secret("BACKEND_SECRET_KEY")
-DEBUG = get_secret("BACKEND_ENVIRONMENT") == "dev"
+if DEBUG:
+    env = environ.Env()
+    path_to_env = os.path.join(BASE_DIR, '.env')
+    environ.Env.read_env(path_to_env)
+
+    SECRET_KEY = env("BACKEND_SECRET_KEY")
+
+    DATABASES = {
+        'default': {
+            "ENGINE": "django.contrib.gis.db.backends.postgis",
+            "NAME": env("BACKEND_DB_NAME"),
+            "USER": env("BACKEND_DB_USER"),
+            "PASSWORD": env("BACKEND_DB_PASSWORD"),
+            "HOST": env("BACKEND_DB_HOST"),
+            "PORT": env("BACKEND_DB_PORT"),
+        }
+    }
+else:
+    SECRET_KEY = get_secret("BACKEND_SECRET_KEY")
+
+    DATABASES = {
+        'default': {
+            "ENGINE": "django.contrib.gis.db.backends.postgis",
+            "NAME": get_secret("BACKEND_DB_NAME"),
+            "USER": get_secret("BACKEND_DB_USER"),
+            "PASSWORD": get_secret("BACKEND_DB_PASSWORD"),
+            "HOST": get_secret("BACKEND_DB_HOST"),
+            "PORT": get_secret("BACKEND_DB_PORT"),
+        }
+    }
+
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -40,17 +71,6 @@ ROOT_URLCONF = 'config.urls'
 WSGI_APPLICATION = 'config.wsgi.application'
 APPEND_SLASH = True
 
-DATABASES = {
-    'default': {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": get_secret("BACKEND_DB_NAME"),
-        "USER": get_secret("BACKEND_DB_USER"),
-        "PASSWORD": get_secret("BACKEND_DB_PASSWORD"),
-        "HOST": get_secret("BACKEND_DB_HOST"),
-        "PORT": get_secret("BACKEND_DB_PORT"),
-    }
-}
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -73,3 +93,12 @@ USE_L10N = True
 USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Настройки логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[
+        logging.StreamHandler()
+    ]
+)
