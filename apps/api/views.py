@@ -1,9 +1,11 @@
+import logging
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from apps.api.exceptions import InvalidRequestException
-from .services.object_tourism_service import *
-from .services.username_service import *
+from .services.object_tourism_service import get_tourist_objects, save_tourist_object, del_all_from_buf_by_username
+from .services.username_service import is_exists_username, save_username
 
 
 class ObjectTourismView(APIView):
@@ -16,16 +18,20 @@ class ObjectTourismView(APIView):
         radius = request.data.get("radius")
         username = request.data.get("username")
 
+        logging.info("center_lat=%s, center_lon=%s, radius=%s, username=%s", center_lat, center_lon, radius, username)
+
         if not all([center_lat, center_lon, radius, username]):
             raise InvalidRequestException("Missing required parameters: center or radius or username")
 
         if not is_exists_username(username):
+            logging.info("Имя пользователя не существует, сохраняю имя в базу")
             save_username(username)
         else:
+            logging.info("Имя пользователя существует, удаляю из буфера")
             del_all_from_buf_by_username(username)
 
         tourist_objects = get_tourist_objects(float(center_lon), float(center_lat), float(radius))
+        logging.info("Получено %s туристических объектов, происходит их сохранение", len(tourist_objects))
         save_tourist_object(tourist_objects, username)
 
         return Response(status=status.HTTP_201_CREATED)
-
