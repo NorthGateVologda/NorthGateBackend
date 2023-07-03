@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from apps.api.exceptions import InvalidRequestException
+from .services.converter_service import convert_from_4326_to_3857
 from .services.object_tourism_service import get_tourist_objects, save_tourist_object, del_all_from_buf_by_username
 from .services.username_service import is_exists_username, save_username
 
@@ -30,6 +31,7 @@ class ObjectTourismView(APIView):
             logging.info("Имя пользователя существует, удаляю из буфера")
             del_all_from_buf_by_username(username)
 
+        center_lon, center_lat = convert_from_4326_to_3857(float(center_lat), float(center_lon))
         tourist_objects = get_tourist_objects(float(center_lon), float(center_lat), float(radius))
         logging.info("Получено %s туристических объектов, происходит их сохранение", len(tourist_objects))
         save_tourist_object(tourist_objects, username)
