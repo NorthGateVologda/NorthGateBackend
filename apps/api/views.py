@@ -31,7 +31,7 @@ class ObjectTourismView(APIView):
             logging.info("Имя пользователя существует, удаляю из буфера")
             del_all_from_buf_by_username(username)
 
-        center_lon, center_lat = convert_from_4326_to_3857(float(center_lat), float(center_lon))
+        center_lon, center_lat = convert_from_4326_to_3857(float(center_lon), float(center_lat))
         tourist_objects = get_tourist_objects(float(center_lon), float(center_lat), float(radius))
         logging.info("Получено %s туристических объектов, происходит их сохранение", len(tourist_objects))
         save_tourist_object(tourist_objects, username)
