@@ -56,15 +56,22 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'rest_framework',
     'apps.api.apps.ApiConfig',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://89.208.199.85:3001',
+    'https://89.208.199.85:3001'
 ]
 
 ROOT_URLCONF = 'config.urls'
