@@ -14,3 +14,4 @@ pyrsistent==0.19.3
 pytz==2023.3
 sqlparse==0.4.4
 typing_extensions==4.7.0
+django-cors-headers==4.1.0
