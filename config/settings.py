@@ -3,8 +3,9 @@ from pathlib import Path
 import environ
 import logging
 
+ENVIRON = os.environ
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEBUG = os.environ.get("ENVIRONMENT") == "development"
+DEBUG = ENVIRON.get("ENVIRONMENT") == "development"
 
 def get_secret(key, default=""):
     value = os.getenv(key, default)
@@ -15,13 +16,8 @@ def get_secret(key, default=""):
 
 
 def get_env(key):
-    if DEBUG:
-        env_file = "dev.env"
-    else:
-        env_file = "prod.env"
-
     env = environ.Env()
-    path_to_env = os.path.join(BASE_DIR, env_file)
+    path_to_env = os.path.join(BASE_DIR, ".env")
     environ.Env.read_env(path_to_env)
     return env(key)
 
@@ -53,8 +49,8 @@ else:
         }
     }
 
-CORS_ALLOWED_ORIGIN_REGEXES = [get_env("CORS_ALLOWED_ORIGIN_REGEXES")]
-ALLOWED_HOSTS = [get_env("ALLOWED_HOSTS")]
+CORS_ALLOWED_ORIGIN_REGEXES = [ENVIRON.get("CORS_ALLOWED_ORIGIN_REGEXES")]
+ALLOWED_HOSTS = [ENVIRON.get("ALLOWED_HOSTS")]
 
 INSTALLED_APPS = [
     'django.contrib.auth',
