@@ -3,6 +3,8 @@ from pathlib import Path
 import environ
 import logging
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+DEBUG = os.environ.get("ENVIRONMENT") == "development"
 
 def get_secret(key, default=""):
     value = os.getenv(key, default)
@@ -12,24 +14,29 @@ def get_secret(key, default=""):
     return value.replace("\n", "")
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-DEBUG = False
+def get_env(key):
+    if DEBUG:
+        env_file = "dev.env"
+    else:
+        env_file = "prod.env"
+
+    env = environ.Env()
+    path_to_env = os.path.join(BASE_DIR, env_file)
+    environ.Env.read_env(path_to_env)
+    return env(key)
+
 
 if DEBUG:
-    env = environ.Env()
-    path_to_env = os.path.join(BASE_DIR, '.env')
-    environ.Env.read_env(path_to_env)
-
-    SECRET_KEY = env("BACKEND_SECRET_KEY")
+    SECRET_KEY = get_env("BACKEND_SECRET_KEY")
 
     DATABASES = {
         'default': {
             "ENGINE": "django.contrib.gis.db.backends.postgis",
-            "NAME": env("BACKEND_DB_NAME"),
-            "USER": env("BACKEND_DB_USER"),
-            "PASSWORD": env("BACKEND_DB_PASSWORD"),
-            "HOST": env("BACKEND_DB_HOST"),
-            "PORT": env("BACKEND_DB_PORT"),
+            "NAME": get_env("BACKEND_DB_NAME"),
+            "USER": get_env("BACKEND_DB_USER"),
+            "PASSWORD": get_env("BACKEND_DB_PASSWORD"),
+            "HOST": get_env("BACKEND_DB_HOST"),
+            "PORT": get_env("BACKEND_DB_PORT"),
         }
     }
 else:
@@ -46,7 +53,8 @@ else:
         }
     }
 
-ALLOWED_HOSTS = ['*']
+CORS_ALLOWED_ORIGINS = [get_env("CORS_ALLOWED_ORIGINS")]
+ALLOWED_HOSTS = [get_env("ALLOWED_HOSTS")]
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -69,15 +77,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    'http://89.208.199.85:3001',
-    'https://89.208.199.85:3001'
-]
-
-ROOT_URLCONF = 'config.urls'
-WSGI_APPLICATION = 'config.wsgi.application'
-APPEND_SLASH = True
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -93,19 +92,20 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'ru-ru'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Настройки логирования
 logging.basicConfig(
-    level = logging.INFO,
+    level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s',
     handlers=[
         logging.StreamHandler()
     ]
 )
+
+ROOT_URLCONF = 'config.urls'
+WSGI_APPLICATION = 'config.wsgi.application'
+APPEND_SLASH = True
+LANGUAGE_CODE = 'ru-ru'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
