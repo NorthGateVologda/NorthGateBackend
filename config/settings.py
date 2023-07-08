@@ -51,6 +51,10 @@ else:
 
 CORS_ALLOWED_ORIGIN_REGEXES = [ENVIRON.get("CORS_ALLOWED_ORIGIN_REGEXES")]
 ALLOWED_HOSTS = [ENVIRON.get("ALLOWED_HOSTS")]
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -65,6 +69,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
