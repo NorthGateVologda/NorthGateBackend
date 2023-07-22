@@ -39,3 +39,4 @@ Include
 .environment
 .env
 .vscode
+venv/
