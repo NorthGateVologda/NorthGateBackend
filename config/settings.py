@@ -1,3 +1,4 @@
+from datetime import timedelta
 import os
 from pathlib import Path
 import environ
@@ -5,7 +6,7 @@ import logging
 
 ENVIRON = os.environ
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEBUG = ENVIRON.get("ENVIRONMENT") == "development"
+DEBUG = ENVIRON.get("ENVIRONMENT", "development") == "development"
 
 def get_secret(key, default=""):
     value = os.getenv(key, default)
@@ -24,6 +25,11 @@ def get_env(key):
 
 if DEBUG:
     SECRET_KEY = get_env("BACKEND_SECRET_KEY")
+    CORS_ALLOW_ALL_ORIGINS = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
 
     DATABASES = {
         'default': {
@@ -37,7 +43,12 @@ if DEBUG:
     }
 else:
     SECRET_KEY = get_secret("BACKEND_SECRET_KEY")
-
+    CORS_ALLOWED_ORIGINS = [ENVIRON.get("CORS_ALLOWED_ORIGINS")]
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    
     DATABASES = {
         'default': {
             "ENGINE": "django.contrib.gis.db.backends.postgis",
@@ -49,12 +60,7 @@ else:
         }
     }
 
-CORS_ALLOWED_ORIGINS = [ENVIRON.get("CORS_ALLOWED_ORIGINS")]
-ALLOWED_HOSTS = [ENVIRON.get("ALLOWED_HOSTS")]
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+ALLOWED_HOSTS = [ENVIRON.get("ALLOWED_HOSTS", "*")]
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -63,8 +69,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.gis',
     'rest_framework',
-    'apps.api.apps.ApiConfig',
-    'corsheaders'
+    'corsheaders',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +83,20 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
+    'SIGNING_KEY': SECRET_KEY,
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
