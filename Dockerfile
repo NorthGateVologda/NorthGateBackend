@@ -2,8 +2,6 @@ FROM python:3.10
 
 ENV PYTHONUNBUFFERED 1
 
-ENV COLUMNS 80
-
 WORKDIR /app
 
 COPY . /app
