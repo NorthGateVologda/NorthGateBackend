@@ -6,12 +6,16 @@ from rest_framework_simplejwt.views import (
 )
 from api.views import (
     registration,
-    logout
+    logout,
+    get_coordinates,
+    get_location_name
 )
 
 urlpatterns = [
     path('api/user/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/user/registration/', registration, name='registration'),
     path('api/user/logout/', logout, name='logout'),
-    path('api/user/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
+    path('api/user/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/get_coordinates/', get_coordinates, name='get_coordinates'),
+    path('api/get_location_name/', get_location_name, name='get_location_name'),
 ]

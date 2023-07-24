@@ -25,6 +25,8 @@ def get_env(key):
 
 if DEBUG:
     SECRET_KEY = get_env("BACKEND_SECRET_KEY")
+    YANDEX_KEY = get_env("YANDEX_KEY")
+    YANDEX_URL = get_env("YANDEX_URL")
     CORS_ALLOW_ALL_ORIGINS = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
     SECURE_SSL_REDIRECT = False
@@ -43,6 +45,8 @@ if DEBUG:
     }
 else:
     SECRET_KEY = get_secret("BACKEND_SECRET_KEY")
+    YANDEX_KEY = get_secret("YANDEX_KEY")
+    YANDEX_URL = get_secret("YANDEX_URL")
     CORS_ALLOWED_ORIGINS = [ENVIRON.get("CORS_ALLOWED_ORIGINS")]
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
