@@ -95,7 +95,7 @@ def get_location_name(request: Any) -> Response:
         return Response("Failed to get location name", status=response.status_code)
     
 @api_view(["GET"])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def get_residential_hexagons(request: Any) -> Response:
     # Получение данных из модели Django и преобразование их в DataFrame
     houses = Facility.objects.all()
