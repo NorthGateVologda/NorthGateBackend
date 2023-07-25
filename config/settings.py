@@ -48,7 +48,7 @@ else:
     YANDEX_KEY = get_secret("YANDEX_KEY")
     YANDEX_URL = get_secret("YANDEX_URL")
     # ДЕЛАЕМ ЭТО НА ВРЕМЯ!!!
-    CORS_ALLOW_CREDENTIALS = True
+    CORS_ALLOWED_ORIGINS = ["northgatevologda.ru"]
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
