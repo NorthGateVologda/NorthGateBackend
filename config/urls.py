@@ -8,7 +8,8 @@ from api.views import (
     registration,
     logout,
     get_coordinates,
-    get_location_name
+    get_location_name,
+    get_residential_hexagons
 )
 
 urlpatterns = [
@@ -18,4 +19,5 @@ urlpatterns = [
     path('api/user/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/get_coordinates/', get_coordinates, name='get_coordinates'),
     path('api/get_location_name/', get_location_name, name='get_location_name'),
+    path('api/get_residential_hexagons/', get_residential_hexagons, name='get_residential_hexagons'),
 ]
