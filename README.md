@@ -115,6 +115,16 @@ curl -X GET "https://api.northgatevologda.ru/api/get_residential_hexagons/" \
 -d '{"city":"city name"}'
 ```
 
+### `GET /api/get_object_tourism/`
+Получение обьектов туризма в радиусе
+
+Пример CURL-запроса:
+```bash
+curl -X POST "https://api.northgatevologda.ru/api/object_tourism" \
+-H "Content-Type: application/json" \
+-d '{"center_lat":"5343335.558077131", "center_lon": "6106854.834885075", "radius": "100"}'
+```
+
 ### Конфигурация для Docker
 
 Для удобства развертывания проекта существует файл `docker-compose.yml`, который описывает конфигурацию контейнеров Docker.
