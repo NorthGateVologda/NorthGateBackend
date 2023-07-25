@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
+from .models import Facility
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -31,3 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
             instance.save()
             return instance
         
+class FacilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Facility
+        fields = ('address', 'x', 'y', 'numberOfInhabitants')

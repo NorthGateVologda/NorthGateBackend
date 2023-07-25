@@ -1,6 +1,10 @@
 """Модуль, содержащий основные точки доступа"""
 import os
 import requests
+import h3
+import pandas as pd
+import geojson
+import logging
 from typing import Any
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -10,7 +14,8 @@ from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, Bl
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings as conf_settings
 
-from .serializers import UserSerializer
+from .serializers import UserSerializer, FacilitySerializer
+from .models import Facility
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -88,3 +93,41 @@ def get_location_name(request: Any) -> Response:
         return Response(location_name)
     else:
         return Response("Failed to get location name", status=response.status_code)
+    
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_residential_hexagons(request: Any) -> Response:
+    # Получение данных из модели Django и преобразование их в DataFrame
+    houses = Facility.objects.all()
+    
+    logging.info('Обьекты: %s', houses)
+    
+    house_data = [{'x': house.x, 'y': house.y, 'population': house.number_of_inhabitants} for house in houses]
+    df = pd.DataFrame(house_data)
+
+    # Размер гексагона (в метрах) - можно изменить в зависимости от нужной плотности гексагонов
+    hex_size = 500  # Примерный размер гексагона в метрах
+
+    # Преобразование координат в индексы гексагонов
+    df['h3_index'] = df.apply(lambda row: h3.geo_to_h3(row['y'], row['x'], 8), axis=1)
+    
+    df['population'] = df['population'].astype(float)
+
+    # Группировка по индексам гексагонов и суммирование населения в каждом гексагоне
+    hex_population = df.groupby('h3_index')['population'].sum().reset_index()
+    
+    logging.info('Обьекты: %s', hex_population)
+
+    # Создание GeoJSON объекта для гексагонов
+    features = []
+    for h3_index, population in zip(hex_population['h3_index'], hex_population['population']):
+        coords = h3.h3_to_geo_boundary(h3_index)
+        polygon = geojson.Polygon([coords])
+        properties = {'population': population}
+        feature = geojson.Feature(geometry=polygon, properties=properties)
+        features.append(feature)
+
+    feature_collection = geojson.FeatureCollection(features)
+
+    return Response(feature_collection)
+    
