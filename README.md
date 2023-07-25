@@ -63,10 +63,57 @@ DATABASES = {
 
 ## Роутинг
 
-- `api/user/login/` - POST (авторизоваться в системе, получив access токен и refresh токен)
-- `api/user/registration/` - POST (зарегистрироваться в системе, получив  access токен и refresh токен)
-- `api/user/logout/` - POST (выйти из системы по access токену)
-- `api/user/token/refresh/` - POST (обновить access токен)
+## Авторизация и регистрация пользователей
+
+### `POST /api/user/login/`
+Авторизоваться в системе, получив access токен и refresh токен.
+
+Пример CURL-запроса:
+```bash
+curl -X POST "https://example.com/api/user/login/" \
+-H "Content-Type: application/json" \
+-d '{"username": "your_username", "password": "your_password"}'
+```
+
+### `POST /api/user/registration/`
+Зарегистрироваться в системе, получив access токен и refresh токен.
+
+Пример CURL-запроса:
+```bash
+curl -X POST "https://example.com/api/user/registration/" \
+-H "Content-Type: application/json" \
+-d '{"username": "new_username", "password": "new_password"}'
+```
+
+### `POST /api/user/logout/`
+Выйти из системы по access токену.
+
+Пример CURL-запроса:
+```bash
+curl -X POST "https://example.com/api/user/logout/" \
+-H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+### `POST /api/user/token/refresh/`
+Обновить access токен.
+
+Пример CURL-запроса:
+```bash
+curl -X POST "https://example.com/api/user/token/refresh/" \
+-H "Authorization: Bearer YOUR_REFRESH_TOKEN"
+```
+
+## Тепловая карта
+
+### `GET /api/get_residential_hexagons/`
+Получить тепловую карту по городу, требуется токен для доступа.
+
+Пример CURL-запроса:
+```bash
+curl -X GET "https://example.com/api/get_residential_hexagons/" \
+-H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+-d '{"city":"city name"}'
+```
 
 ### Конфигурация для Docker
 
