@@ -135,7 +135,7 @@ def get_residential_hexagons(request: Any) -> Response:
     return Response(feature_collection)
 
 @api_view(["POST"])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def get_object_tourism(request) -> Response:
     if not request.data:
         return Response({"error": "Missing required body"}, status=status.HTTP_400_BAD_REQUEST)
