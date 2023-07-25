@@ -10,12 +10,15 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings as conf_settings
-
 from .serializers import UserSerializer, FacilitySerializer
-from .models import Facility
+from .models import Facility, ObjectTourism
+from pyproj import Transformer
+from typing import Tuple, List
+from django.contrib.gis.geos import Point
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -109,7 +112,7 @@ def get_residential_hexagons(request: Any) -> Response:
     hex_size = 500  # Примерный размер гексагона в метрах
 
     # Преобразование координат в индексы гексагонов
-    df['h3_index'] = df.apply(lambda row: h3.geo_to_h3(row['y'], row['x'], 8), axis=1)
+    df['h3_index'] = df.apply(lambda row: h3.geo_to_h3(row['y'], row['x'], 9), axis=1)
     
     df['population'] = df['population'].astype(float)
 
@@ -130,4 +133,54 @@ def get_residential_hexagons(request: Any) -> Response:
     feature_collection = geojson.FeatureCollection(features)
 
     return Response(feature_collection)
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def get_object_tourism(request) -> Response:
+    if not request.data:
+        return Response({"error": "Missing required body"}, status=status.HTTP_400_BAD_REQUEST)
+
+    center_lat = request.data.get("center_lat")
+    center_lon = request.data.get("center_lon")
+    radius = request.data.get("radius")
+    username = request.data.get("username")
+
+    logging.info("center_lat=%s, center_lon=%s, radius=%s", center_lat, center_lon, radius)
+
+    if not all([center_lat, center_lon, radius]):
+        return Response({"error": "Missing required parameters: center or radius"}, status=status.HTTP_400_BAD_REQUEST)
+
+    tourist_objects = get_tourist_objects(float(center_lon), float(center_lat), float(radius))
     
+    features = []
+    for obj in tourist_objects:
+        # Формируем геометрию Point для GeoJSON
+        geometry = {"type": "Point", "coordinates": [obj.x, obj.y]}
+
+        # Создаем свойства объекта GeoJSON
+        properties = {
+            "id": obj.id,
+            "name": obj.name,
+            "city": obj.city,
+            "street": obj.street,
+            "house": obj.house,
+            "post": obj.post,
+        }
+
+        # Создаем объект Feature для каждого объекта
+        feature = geojson.Feature(geometry=geometry, properties=properties)
+
+        features.append(feature)
+
+    # Создаем FeatureCollection из всех объектов
+    feature_collection = geojson.FeatureCollection(features)
+
+    return Response(feature_collection)
+
+def get_tourist_objects(center_lon: float, center_lat: float,  radius: float) -> List[ObjectTourism]:
+    point = Point(center_lon, center_lat, srid=3857)
+    logging.info("Точка сформирована: %s", point)
+    circle = point.buffer(radius)
+    logging.info("Окружность сформирована: %s", circle)
+    found_tourist_objects = ObjectTourism.objects.filter(wkb_geometry__intersects=circle)
+    return found_tourist_objects

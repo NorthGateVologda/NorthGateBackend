@@ -9,7 +9,8 @@ from api.views import (
     logout,
     get_coordinates,
     get_location_name,
-    get_residential_hexagons
+    get_residential_hexagons,
+    get_object_tourism
 )
 
 urlpatterns = [
@@ -20,4 +21,6 @@ urlpatterns = [
     path('api/get_coordinates/', get_coordinates, name='get_coordinates'),
     path('api/get_location_name/', get_location_name, name='get_location_name'),
     path('api/get_residential_hexagons/', get_residential_hexagons, name='get_residential_hexagons'),
+    path('api/get_object_tourism/', get_object_tourism, name='get_object_tourism'),
+    
 ]
