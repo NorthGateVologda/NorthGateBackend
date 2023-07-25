@@ -70,7 +70,7 @@ DATABASES = {
 
 Пример CURL-запроса:
 ```bash
-curl -X POST "https://example.com/api/user/login/" \
+curl -X POST "https://api.northgatevologda.ru/api/user/login/" \
 -H "Content-Type: application/json" \
 -d '{"username": "your_username", "password": "your_password"}'
 ```
@@ -80,7 +80,7 @@ curl -X POST "https://example.com/api/user/login/" \
 
 Пример CURL-запроса:
 ```bash
-curl -X POST "https://example.com/api/user/registration/" \
+curl -X POST "https://api.northgatevologda.ru/api/user/registration/" \
 -H "Content-Type: application/json" \
 -d '{"username": "new_username", "password": "new_password"}'
 ```
@@ -90,7 +90,7 @@ curl -X POST "https://example.com/api/user/registration/" \
 
 Пример CURL-запроса:
 ```bash
-curl -X POST "https://example.com/api/user/logout/" \
+curl -X POST "https://api.northgatevologda.ru/api/user/logout/" \
 -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
@@ -99,7 +99,7 @@ curl -X POST "https://example.com/api/user/logout/" \
 
 Пример CURL-запроса:
 ```bash
-curl -X POST "https://example.com/api/user/token/refresh/" \
+curl -X POST "https://api.northgatevologda.ru/api/user/token/refresh/" \
 -H "Authorization: Bearer YOUR_REFRESH_TOKEN"
 ```
 
@@ -110,7 +110,7 @@ curl -X POST "https://example.com/api/user/token/refresh/" \
 
 Пример CURL-запроса:
 ```bash
-curl -X GET "https://example.com/api/get_residential_hexagons/" \
+curl -X GET "https://api.northgatevologda.ru/api/get_residential_hexagons/" \
 -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 -d '{"city":"city name"}'
 ```
