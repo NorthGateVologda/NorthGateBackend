@@ -74,6 +74,8 @@ curl -X POST "https://api.northgatevologda.ru/api/user/login/" \
 -H "Content-Type: application/json" \
 -d '{"username": "your_username", "password": "your_password"}'
 ```
+где `username` - имя
+    `password` - пароль
 
 ### `POST /api/user/registration/`
 Зарегистрироваться в системе, получив access токен и refresh токен.
@@ -84,6 +86,8 @@ curl -X POST "https://api.northgatevologda.ru/api/user/registration/" \
 -H "Content-Type: application/json" \
 -d '{"username": "new_username", "password": "new_password"}'
 ```
+где `username` - имя
+    `password` - пароль
 
 ### `POST /api/user/logout/`
 Выйти из системы по access токену.
@@ -111,9 +115,9 @@ curl -X POST "https://api.northgatevologda.ru/api/user/token/refresh/" \
 Пример CURL-запроса:
 ```bash
 curl -X GET "https://api.northgatevologda.ru/api/get_residential_hexagons/" \
--H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 -d '{"city":"city name"}'
 ```
+где `city` - название города, тепловую карту по которому необходимо получить
 
 ### `GET /api/get_object_tourism/`
 Получение обьектов туризма в радиусе
@@ -124,6 +128,28 @@ curl -X POST "https://api.northgatevologda.ru/api/object_tourism" \
 -H "Content-Type: application/json" \
 -d '{"center_lat":"5343335.558077131", "center_lon": "6106854.834885075", "radius": "100"}'
 ```
+где `center_lat` - широта центра,  
+    `center_lon` - долгота центра,  
+    `radius` - радиус  
+Параметры используются для получения обьектов в определенных области на карте
+
+### `GET /api/get_coordinates/`
+Получение координат по названию обьекта
+
+Пример CURL-запроса:
+```bash
+curl -X POST "https://api.northgatevologda.ru/api/get_coordinates/?geocode=НАЗВАНИЕ ОБЬЕКТА" \
+```
+где `geocode` - название обьекта, координаты которого необходимо получить
+
+### `GET /api/get_location_name/`
+Получение обьектов туризма в радиусе
+
+Пример CURL-запроса:
+```bash
+curl -X POST "https://api.northgatevologda.ru/api/get_location_name/?lat=ШИРОТА&lon=ДОЛГОТА"
+```
+где `lat` - широта, `lon` - долгота обьекта, название которого необходимо получить
 
 ### Конфигурация для Docker
 
