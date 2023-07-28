@@ -115,6 +115,7 @@ curl -X POST "https://api.northgatevologda.ru/api/user/token/refresh/" \
 Пример CURL-запроса:
 ```bash
 curl -X GET "https://api.northgatevologda.ru/api/get_residential_hexagons/" \
+-H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 -d '{"city":"city name"}'
 ```
 где `city` - название города, тепловую карту по которому необходимо получить
@@ -126,6 +127,7 @@ curl -X GET "https://api.northgatevologda.ru/api/get_residential_hexagons/" \
 ```bash
 curl -X POST "https://api.northgatevologda.ru/api/object_tourism" \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 -d '{"center_lat":"5343335.558077131", "center_lon": "6106854.834885075", "radius": "100"}'
 ```
 где `center_lat` - широта центра,  
