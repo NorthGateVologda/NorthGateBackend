@@ -8,6 +8,7 @@ ENVIRON = os.environ
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = ENVIRON.get("ENVIRONMENT", "development") == "development"
 
+
 def get_secret(key, default=""):
     value = os.getenv(key, default)
     if os.path.isfile(value):
@@ -47,16 +48,16 @@ else:
     SECRET_KEY = get_secret("BACKEND_SECRET_KEY")
     YANDEX_KEY = get_secret("YANDEX_KEY")
     YANDEX_URL = get_secret("YANDEX_URL")
-    
+
     # ДЕЛАЕМ ЭТО НА ВРЕМЯ!!!
     CORS_ALLOW_ALL_ORIGINS = True
     CORS_ALLOW_CREDENTIALS = True
-    
+
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    
+
     DATABASES = {
         'default': {
             "ENGINE": "django.contrib.gis.db.backends.postgis",
