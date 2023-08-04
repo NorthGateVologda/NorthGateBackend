@@ -111,8 +111,10 @@ def get_residential_hexagons(request: Any) -> Response:
     FROM     (SELECT   pl.geometry AS hexagon,
                        COALESCE(SUM(CAST(f.number_of_inhabitants AS DECIMAL)), 0) AS population
               FROM     polygons_lens pl
+                       LEFT JOIN facility_polygons fp
+                          ON pl.id = fp.polygon_id
                        LEFT JOIN facility f
-                          ON ST_Contains(pl.geometry, f.geometry)
+                          ON fp.facility_id = f.facility_id
               GROUP BY pl.geometry) v;
     """
 
