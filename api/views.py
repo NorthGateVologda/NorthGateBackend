@@ -109,7 +109,7 @@ def get_residential_hexagons(request: Any) -> Response:
                 json_agg(ST_AsGeoJSON(v.*)::json)
              ) AS geoJson
     FROM     (SELECT   pl.geometry AS hexagon,
-                       COALESCE(SUM(CAST(f.number_of_inhabitants AS DECIMAL)), 0) AS population
+                       SUM(COALESCE(CAST(f.number_of_inhabitants AS DECIMAL), 0)) AS population
               FROM     polygons_lens pl
                        LEFT JOIN facility_polygons fp
                           ON pl.id = fp.polygon_id
