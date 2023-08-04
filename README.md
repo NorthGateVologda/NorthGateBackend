@@ -120,6 +120,17 @@ curl -X GET "https://api.northgatevologda.ru/api/get_residential_hexagons/" \
 ```
 где `city` - название города, тепловую карту по которому необходимо получить
 
+### `GET /api/get_residential_hexagons/`
+Получить все дома в заданном городе
+
+Пример CURL-запроса:
+```bash
+curl -X GET "https://api.northgatevologda.ru/api/get_facilities/" \
+-H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+-d '{"city":"city name"}'
+```
+где `city` - название города, дома в котором необходимо получить
+
 ### `GET /api/get_object_tourism/`
 Получение обьектов туризма в радиусе
 
