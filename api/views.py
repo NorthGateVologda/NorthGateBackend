@@ -102,31 +102,18 @@ def get_location_name(request: Any) -> Response:
 @permission_classes([IsAuthenticated])
 def get_residential_hexagons(request: Any) -> Response:
     query = """
-    WITH hexagons AS (SELECT   ST_SetSRID(
-                                     ST_FlipCoordinates(
-                                     ST_GeomFromGeoJSON('{"type":"Polygon", "coordinates":' || geometry_lens || '}')
-                                  ), 
-                                  4326) AS hexagon
-                      FROM     polygons_lens),
-         points   AS (SELECT   ST_SetSRID(
-                                     ST_FlipCoordinates(
-                                     ST_GeomFromGeoJSON('{"type":"Point", "coordinates":' || coordinats || '}')
-                                  ), 
-                                  4326) AS point,
-                               number_of_inhabitants
-                      FROM     facility)
     SELECT   json_build_object(
                 'type', 
                 'FeatureCollection',
                 'features', 
                 json_agg(ST_AsGeoJSON(v.*)::json)
              ) AS geoJson
-    FROM     (SELECT   h.hexagon,
-                       COALESCE(SUM(CAST(p.number_of_inhabitants AS DECIMAL)), 0) AS population
-              FROM     hexagons h
-                       LEFT JOIN points p
-                          ON ST_Contains(h.hexagon, p.point)
-              GROUP BY h.hexagon) v;
+    FROM     (SELECT   pl.geometry AS hexagon,
+                       COALESCE(SUM(CAST(f.number_of_inhabitants AS DECIMAL)), 0) AS population
+              FROM     polygons_lens pl
+                       LEFT JOIN facility f
+                          ON ST_Contains(pl.geometry, f.geometry)
+              GROUP BY pl.geometry) v;
     """
 
     return Response(execute_query(query))
