@@ -131,11 +131,7 @@ def get_facilities(request: Any) -> Response:
                 'features', 
                 json_agg(ST_AsGeoJSON(v.*)::json)
              ) AS geoJson
-    FROM     (SELECT   ST_SetSRID(
-                          ST_FlipCoordinates(
-                             ST_GeomFromGeoJSON('{"type":"Point", "coordinates":' || coordinats || '}')
-                          ), 
-                       4326) AS point,
+    FROM     (SELECT   f.geometry AS point,
                        f.name,
                        f.type2 AS type,
                        number_of_inhabitants AS population
