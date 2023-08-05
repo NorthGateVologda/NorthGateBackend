@@ -131,6 +131,17 @@ curl -X GET "http://api.northgatevologda.ru:8000/api/get_facilities/" \
 ```
 где `city` - название города, дома в котором необходимо получить
 
+### `GET /api/get_recommendation_placement_parks/`
+Получить рекомендацию по размещению парков в заданном городе
+
+Пример CURL-запроса:
+```bash
+curl -X GET "http://api.northgatevologda.ru:8000/api/get_recommendation_placement_parks/" \
+-H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+-d '{"city":"city name"}'
+```
+где `city` - название города, дома в котором необходимо получить
+
 ### `GET /api/get_object_tourism/`
 Получение обьектов туризма в радиусе
 
