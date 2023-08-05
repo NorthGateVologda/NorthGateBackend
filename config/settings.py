@@ -29,11 +29,8 @@ if DEBUG:
     SECRET_KEY = get_env("BACKEND_SECRET_KEY")
     YANDEX_KEY = get_env("YANDEX_KEY")
     YANDEX_URL = get_env("YANDEX_URL")
+
     CORS_ALLOW_ALL_ORIGINS = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
-    SECURE_SSL_REDIRECT = False
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
 
     DATABASES = {
         'default': {
@@ -54,11 +51,6 @@ else:
     CORS_ALLOW_ALL_ORIGINS = True
     CORS_ALLOW_CREDENTIALS = True
 
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-
     DATABASES = {
         'default': {
             "ENGINE": "django.contrib.gis.db.backends.postgis",
@@ -71,6 +63,10 @@ else:
     }
 
 ALLOWED_HOSTS = [ENVIRON.get("ALLOWED_HOSTS", "*")]
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 
 INSTALLED_APPS = [
     'django.contrib.auth',
