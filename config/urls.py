@@ -12,7 +12,8 @@ from api.views import (
     get_location_name,
     get_residential_hexagons,
     get_object_tourism,
-    get_facilities
+    get_facilities,
+    get_recommendation_placement_parks,
 )
 
 urlpatterns = [
@@ -25,4 +26,5 @@ urlpatterns = [
     path('api/get_residential_hexagons/', get_residential_hexagons, name='get_residential_hexagons'),
     path('api/get_object_tourism/', get_object_tourism, name='get_object_tourism'),
     path('api/get_facilities/', get_facilities, name='get_facilities'),
+    path('api/get_recommendation_placement_parks/', get_recommendation_placement_parks, name='get_recommendation_placement_parks'),
 ]

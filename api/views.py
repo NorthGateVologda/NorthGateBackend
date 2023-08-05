@@ -156,6 +156,12 @@ def get_facilities(request: Any) -> Response:
     return Response(execute_query("fnc_get_facilities_geoJson"))
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_recommendation_placement_parks(request: Any) -> Response:
+    return Response(execute_query("fnc_get_recommendation_placement_parks_json"))
+
+
 def execute_query(function: str) -> str:
     with connection.cursor() as cursor:
         cursor.execute(f"SELECT {function}()")

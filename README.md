@@ -70,7 +70,7 @@ DATABASES = {
 
 Пример CURL-запроса:
 ```bash
-curl -X POST "https://api.northgatevologda.ru/api/user/login/" \
+curl -X POST "http://api.northgatevologda.ru:8000/api/user/login/" \
 -H "Content-Type: application/json" \
 -d '{"username": "your_username", "password": "your_password"}'
 ```
@@ -82,7 +82,7 @@ curl -X POST "https://api.northgatevologda.ru/api/user/login/" \
 
 Пример CURL-запроса:
 ```bash
-curl -X POST "https://api.northgatevologda.ru/api/user/registration/" \
+curl -X POST "http://api.northgatevologda.ru:8000/api/user/registration/" \
 -H "Content-Type: application/json" \
 -d '{"username": "new_username", "password": "new_password"}'
 ```
@@ -94,7 +94,7 @@ curl -X POST "https://api.northgatevologda.ru/api/user/registration/" \
 
 Пример CURL-запроса:
 ```bash
-curl -X POST "https://api.northgatevologda.ru/api/user/logout/" \
+curl -X POST "http://api.northgatevologda.ru:8000/api/user/logout/" \
 -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
@@ -103,7 +103,7 @@ curl -X POST "https://api.northgatevologda.ru/api/user/logout/" \
 
 Пример CURL-запроса:
 ```bash
-curl -X POST "https://api.northgatevologda.ru/api/user/token/refresh/" \
+curl -X POST "http://api.northgatevologda.ru:8000/api/user/token/refresh/" \
 -H "Authorization: Bearer YOUR_REFRESH_TOKEN"
 ```
 
@@ -114,7 +114,7 @@ curl -X POST "https://api.northgatevologda.ru/api/user/token/refresh/" \
 
 Пример CURL-запроса:
 ```bash
-curl -X GET "https://api.northgatevologda.ru/api/get_residential_hexagons/" \
+curl -X GET "http://api.northgatevologda.ru:8000/api/get_residential_hexagons/" \
 -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 -d '{"city":"city name"}'
 ```
@@ -125,7 +125,18 @@ curl -X GET "https://api.northgatevologda.ru/api/get_residential_hexagons/" \
 
 Пример CURL-запроса:
 ```bash
-curl -X GET "https://api.northgatevologda.ru/api/get_facilities/" \
+curl -X GET "http://api.northgatevologda.ru:8000/api/get_facilities/" \
+-H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+-d '{"city":"city name"}'
+```
+где `city` - название города, дома в котором необходимо получить
+
+### `GET /api/get_recommendation_placement_parks/`
+Получить рекомендацию по размещению парков в заданном городе
+
+Пример CURL-запроса:
+```bash
+curl -X GET "http://api.northgatevologda.ru:8000/api/get_recommendation_placement_parks/" \
 -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 -d '{"city":"city name"}'
 ```
@@ -136,7 +147,7 @@ curl -X GET "https://api.northgatevologda.ru/api/get_facilities/" \
 
 Пример CURL-запроса:
 ```bash
-curl -X POST "https://api.northgatevologda.ru/api/object_tourism" \
+curl -X POST "http://api.northgatevologda.ru:8000/api/object_tourism" \
 -H "Content-Type: application/json" \
 -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 -d '{"center_lat":"5343335.558077131", "center_lon": "6106854.834885075", "radius": "100"}'
@@ -151,7 +162,7 @@ curl -X POST "https://api.northgatevologda.ru/api/object_tourism" \
 
 Пример CURL-запроса:
 ```bash
-curl -X POST "https://api.northgatevologda.ru/api/get_coordinates/?geocode=НАЗВАНИЕ ОБЬЕКТА" \
+curl -X POST "http://api.northgatevologda.ru:8000/api/get_coordinates/?geocode=НАЗВАНИЕ ОБЬЕКТА" \
 ```
 где `geocode` - название обьекта, координаты которого необходимо получить
 
@@ -160,7 +171,7 @@ curl -X POST "https://api.northgatevologda.ru/api/get_coordinates/?geocode=НА�
 
 Пример CURL-запроса:
 ```bash
-curl -X POST "https://api.northgatevologda.ru/api/get_location_name/?lat=ШИРОТА&lon=ДОЛГОТА"
+curl -X POST "http://api.northgatevologda.ru:8000/api/get_location_name/?lat=ШИРОТА&lon=ДОЛГОТА"
 ```
 где `lat` - широта, `lon` - долгота обьекта, название которого необходимо получить
 
