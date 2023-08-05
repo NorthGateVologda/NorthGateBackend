@@ -40,3 +40,4 @@ Include
 .env
 .vscode
 venv/
+api/migrations/
