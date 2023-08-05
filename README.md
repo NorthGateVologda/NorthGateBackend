@@ -120,7 +120,7 @@ curl -X GET "https://api.northgatevologda.ru/api/get_residential_hexagons/" \
 ```
 где `city` - название города, тепловую карту по которому необходимо получить
 
-### `GET /api/get_residential_hexagons/`
+### `GET /api/get_facilities/`
 Получить все дома в заданном городе
 
 Пример CURL-запроса:

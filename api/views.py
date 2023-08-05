@@ -1,20 +1,22 @@
 """Модуль, содержащий основные точки доступа"""
-import requests
-import geojson
 import logging
 from typing import Any
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.conf import settings as conf_settings
-from .serializers import UserSerializer
-from .models import ObjectTourism
 from typing import List
+
+import geojson
+import requests
+from django.conf import settings as conf_settings
 from django.contrib.gis.geos import Point
 from django.db import connection
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from .models import ObjectTourism
+from .serializers import UserSerializer
 
 
 @api_view(["POST"])
@@ -98,49 +100,6 @@ def get_location_name(request: Any) -> Response:
         return Response("Failed to get location name", status=response.status_code)
 
 
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def get_residential_hexagons(request: Any) -> Response:
-    query = """
-    SELECT   json_build_object(
-                'type', 
-                'FeatureCollection',
-                'features', 
-                json_agg(ST_AsGeoJSON(v.*)::json)
-             ) AS geoJson
-    FROM     (SELECT   pl.geometry AS hexagon,
-                       SUM(COALESCE(CAST(f.number_of_inhabitants AS DECIMAL), 0)) AS population
-              FROM     polygons_lens pl
-                       LEFT JOIN facility_polygons fp
-                          ON pl.id = fp.polygon_id
-                       LEFT JOIN facility f
-                          ON fp.facility_id = f.facility_id
-              GROUP BY pl.geometry) v;
-    """
-
-    return Response(execute_query(query))
-
-
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def get_facilities(request: Any) -> Response:
-    query = """
-    SELECT   json_build_object(
-                'type', 
-                'FeatureCollection',
-                'features', 
-                json_agg(ST_AsGeoJSON(v.*)::json)
-             ) AS geoJson
-    FROM     (SELECT   f.geometry AS point,
-                       f.name,
-                       f.type2 AS type,
-                       number_of_inhabitants AS population
-              FROM     facility f) v;
-    """
-
-    return Response(execute_query(query))
-
-
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def get_object_tourism(request) -> Response:
@@ -185,17 +144,29 @@ def get_object_tourism(request) -> Response:
     return Response(feature_collection)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_residential_hexagons(request: Any) -> Response:
+    return Response(execute_query("fnc_get_hexagons_geoJson"))
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_facilities(request: Any) -> Response:
+    return Response(execute_query("fnc_get_facilities_geoJson"))
+
+
+def execute_query(function: str) -> str:
+    with connection.cursor() as cursor:
+        cursor.execute(f"SELECT {function}()")
+        geoJson = cursor.fetchone()[0]
+
+    return geoJson
+
+
 def get_tourist_objects(center_lon: float, center_lat: float, radius: float) -> List[ObjectTourism]:
     point = Point(center_lon, center_lat, srid=3857)
     logging.info("Точка сформирована: %s", point)
     circle = point.buffer(radius)
     logging.info("Окружность сформирована: %s", circle)
     return ObjectTourism.objects.filter(wkb_geometry__intersects=circle)
-
-
-def execute_query(query: str) -> str:
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        geoJson = cursor.fetchone()[0]
-
-    return geoJson
